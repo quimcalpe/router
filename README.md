@@ -135,6 +135,7 @@ Default behaviour is to honour distinction between routes with and wothout trail
 ```php
 $router = new Router();
 $router->addRoute('GET', '/users', 'Controller');
+$router->parse('GET', '/users'); // => matches!
 $router->parse('GET', '/users/'); // => NOT FOUND
 ```
 
@@ -144,7 +145,8 @@ You can disable this behaviour with `disableTrailingSlashCheck` method:
 $router = new Router();
 $router->addRoute('GET', '/users', 'Controller');
 $router->disableTrailingSlashCheck();
-$router->parse('GET', '/users/'); // => found!
+$router->parse('GET', '/users'); // => matches!
+$router->parse('GET', '/users/'); // => matches!
 ```
 
 ## Testing
