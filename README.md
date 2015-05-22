@@ -128,6 +128,24 @@ interface DispatcherInterface
 
 `QuimCalpe\Router\ParsedRoute` is a small Value Object with `controller()` and `params()` methods already parsed by `Router::parse`.
 
+### Trailing slash
+
+Default behaviour is to honour distinction between routes with and wothout trailing slashes:
+
+```php
+$router = new Router();
+$router->addRoute('GET', '/users', 'Controller');
+$router->parse('GET', '/users/'); // => NOT FOUND
+```
+
+You can disable this behaviour with `disableTrailingSlashCheck` method:
+
+```php
+$router = new Router();
+$router->addRoute('GET', '/users', 'Controller');
+$router->disableTrailingSlashCheck();
+$router->parse('GET', '/users/'); // => found!
+```
 
 ## Testing
 
