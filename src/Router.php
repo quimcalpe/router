@@ -65,6 +65,7 @@ class Router
                     $this->findMatches($available_method, $uri, $prefix);
                     $allowed_methods[] = $available_method;
                 } catch (RouteNotFoundException $e) {
+                    // not found, skip
                 }
             }
             if (count($allowed_methods)) {
