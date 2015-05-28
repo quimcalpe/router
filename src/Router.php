@@ -42,6 +42,41 @@ class Router
         }
     }
 
+    public function addHead($uri, $handler)
+    {
+        $this->addRoute("HEAD", $uri, $handler);
+    }
+
+    public function addGet($uri, $handler)
+    {
+        $this->addRoute("GET", $uri, $handler);
+    }
+
+    public function addDelete($uri, $handler)
+    {
+        $this->addRoute("DELETE", $uri, $handler);
+    }
+
+    public function addOptions($uri, $handler)
+    {
+        $this->addRoute("OPTIONS", $uri, $handler);
+    }
+
+    public function addPatch($uri, $handler)
+    {
+        $this->addRoute("PATCH", $uri, $handler);
+    }
+
+    public function addPost($uri, $handler)
+    {
+        $this->addRoute("POST", $uri, $handler);
+    }
+
+    public function addPut($uri, $handler)
+    {
+        $this->addRoute("PUT", $uri, $handler);
+    }
+
     public function disableTrailingSlashCheck()
     {
         $this->trailing_slash_check = false;

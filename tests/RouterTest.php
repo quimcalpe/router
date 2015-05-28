@@ -93,6 +93,49 @@ class RouterTest extends TestCase
         $this->assertEquals("Vendor\Package\Controller2", $router->parse("POST", "/segment2")->controller());
     }
 
+    public function testAddHead()
+    {
+        $router = new Router();
+        $router->addHead("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("HEAD", "/segment")->controller());
+    }
+    public function testAddGet()
+    {
+        $router = new Router();
+        $router->addGet("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("GET", "/segment")->controller());
+    }
+    public function testAddDelete()
+    {
+        $router = new Router();
+        $router->addDelete("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("DELETE", "/segment")->controller());
+    }
+    public function testAddOptions()
+    {
+        $router = new Router();
+        $router->addOptions("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("OPTIONS", "/segment")->controller());
+    }
+    public function testAddPatch()
+    {
+        $router = new Router();
+        $router->addPatch("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("PATCH", "/segment")->controller());
+    }
+    public function testAddPost()
+    {
+        $router = new Router();
+        $router->addPost("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("POST", "/segment")->controller());
+    }
+    public function testAddPut()
+    {
+        $router = new Router();
+        $router->addPut("/segment", "Vendor\Package\Controller");
+        $this->assertEquals("Vendor\Package\Controller", $router->parse("PUT", "/segment")->controller());
+    }
+
     public function testAddRouteMethodNotAllowed()
     {
         $this->setExpectedException('QuimCalpe\Router\MethodNotAllowedException');
