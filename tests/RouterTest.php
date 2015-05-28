@@ -70,6 +70,13 @@ class RouterTest extends TestCase
         $router->parse("GET", "/bad/route/whatever");
     }
 
+    public function testNotFound2()
+    {
+        $this->setExpectedException('QuimCalpe\Router\RouteNotFoundException');
+        $router = new Router($this->routes);
+        $router->parse("PUT", "/bad/route/whatever");
+    }
+
     public function testAddRoute()
     {
         $router = new Router([
