@@ -10,8 +10,10 @@ class Router
         '/\{([A-Za-z]\w*):word\}/' => '(?<$1>\w+)',
         '/\{([A-Za-z]\w*):number\}/' => '(?<$1>\d+)',
         '/\{([A-Za-z]\w*):slug\}/' => '(?<$1>[A-Za-z0-9_-]+)',
+        '/\{([A-Za-z]\w*):([^}]+)\}/' => '(?<$1>$2)',
         '/\//' => '\/'
     ];
+    static private $parsed_regexp = []; // cache
 
     public function __construct(array $routes = [])
     {
@@ -115,7 +117,7 @@ class Router
     private function findMatches($method, $uri, $prefix = "")
     {
         foreach (array_keys($this->routes[strtoupper($method)]) as $route) {
-            $parsed_regexp = preg_replace(array_keys($this->regexp_map), array_values($this->regexp_map), $prefix.$route);
+            $parsed_regexp = $this->prepareRouteRegexp($prefix.$route);
             if (preg_match_all("/^".$parsed_regexp.($this->trailing_slash_check ? "" : "\/?")."$/i", $uri, $matches, PREG_SET_ORDER)) {
                 if (count($matches)) {
                     $matches = array_diff_key($matches[0], range(0, count($matches[0])));
@@ -124,6 +126,14 @@ class Router
             }
         }
         throw new RouteNotFoundException("No route for '{$uri}' found");
+    }
+
+    private function prepareRouteRegexp($route)
+    {
+        if (!array_key_exists($route, self::$parsed_regexp)) {
+            self::$parsed_regexp[$route] = preg_replace(array_keys($this->regexp_map), array_values($this->regexp_map), $route);
+        }
+        return self::$parsed_regexp[$route];
     }
 
 }
