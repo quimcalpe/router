@@ -5,6 +5,12 @@ use RuntimeException;
 
 class WildcardDispatcher implements DispatcherInterface
 {
+    /**
+     * @param ParsedRoute $route
+     * @return string
+     *
+     * @throws RuntimeException
+     */
     public function handle(ParsedRoute $route)
     {
         $controller = $route->controller();

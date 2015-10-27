@@ -7,6 +7,12 @@ use RuntimeException;
 
 class RequestResponseDispatcher implements DispatcherInterface
 {
+    /**
+     * @param ParsedRoute $route
+     * @return Response
+     *
+     * @throws RuntimeException
+     */
     public function handle(ParsedRoute $route)
     {
         $segments = explode("::", $route->controller());
