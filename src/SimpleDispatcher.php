@@ -5,6 +5,12 @@ use RuntimeException;
 
 class SimpleDispatcher implements DispatcherInterface
 {
+    /**
+     * @param ParsedRoute $route
+     * @return string
+     *
+     * @throws RuntimeException
+     */
     public function handle(ParsedRoute $route)
     {
         $segments = explode("::", $route->controller());
