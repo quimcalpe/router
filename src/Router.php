@@ -188,7 +188,9 @@ class Router
         if ($prefix !== "" && substr($prefix, 0, 1) !== "/") {
             $prefix = "/".$prefix;
         }
-        if (!isset($this->routes[strtoupper($method)])) {
+        try {
+            return $this->findMatches($method, $uri, $prefix);            
+        } catch (RouteNotFoundException $e) {
             $allowed_methods = [];
             foreach ($this->routes as $available_method => $routes) {
                 try {
@@ -204,7 +206,6 @@ class Router
                 throw new RouteNotFoundException("No route for '{$uri}' found");
             }
         }
-        return $this->findMatches($method, $uri, $prefix);
     }
 
     /**
@@ -223,14 +224,16 @@ class Router
      */
     private function findMatches($method, $uri, $prefix = "")
     {
-        foreach (array_keys($this->routes[strtoupper($method)]) as $route) {
-            $parsed_regexp = $this->prepareRouteRegexp($prefix.$route);
-            if (preg_match_all("/^".$parsed_regexp.($this->trailing_slash_check ? "" : "\/?")."$/i", $uri, $matches, PREG_SET_ORDER)) {
-                if (count($matches)) {
-                    $matches = array_diff_key($matches[0], range(0, count($matches[0])));
+        if (isset($this->routes[strtoupper($method)])) {
+            foreach (array_keys($this->routes[strtoupper($method)]) as $route) {
+                $parsed_regexp = $this->prepareRouteRegexp($prefix.$route);
+                if (preg_match_all("/^".$parsed_regexp.($this->trailing_slash_check ? "" : "\/?")."$/i", $uri, $matches, PREG_SET_ORDER)) {
+                    if (count($matches)) {
+                        $matches = array_diff_key($matches[0], range(0, count($matches[0])));
+                    }
+                    return new ParsedRoute($this->routes[strtoupper($method)][$route], $matches);
                 }
-                return new ParsedRoute($this->routes[strtoupper($method)][$route], $matches);
-            }
+            }            
         }
         throw new RouteNotFoundException("No route for '{$uri}' found");
     }

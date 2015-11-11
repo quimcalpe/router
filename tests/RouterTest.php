@@ -140,6 +140,7 @@ class RouterTest extends TestCase
     {
         $this->setExpectedException('QuimCalpe\Router\MethodNotAllowedException');
         $router = new Router;
+        $router->addRoute("GET", "/segment", "Vendor\Package\Controller");
         $router->addRoute(["POST", "PUT"], "/segment2", "Vendor\Package\Controller2");
         $router->parse("GET", "/segment2");
     }
