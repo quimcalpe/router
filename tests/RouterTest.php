@@ -7,6 +7,7 @@ use PHPUnit_Framework_TestCase as TestCase;
 class RouterTest extends TestCase
 {
     private $routes = [
+        "/" => "Vendor\Package\HomeController",
         "/segment" => "Vendor\Package\Controller",
         "/segment1/segment2" => "Vendor\Package1\Controller2",
         "/segment1/segment4" => "Vendor\Package1\Controller4",
@@ -19,11 +20,22 @@ class RouterTest extends TestCase
     public function testFound()
     {
         $router = new Router($this->routes);
+        $this->assertEquals("Vendor\Package\HomeController", $router->parse("GET", "/")->controller());
         $this->assertEquals("Vendor\Package\Controller", $router->parse("GET", "/segment")->controller());
         $this->assertEquals("Vendor\Package1\Controller2", $router->parse("GET", "/segment1/segment2")->controller());
         $this->assertEquals("Vendor\Package1\Controller2", $router->parse("GET", "/segment1/segment2?q=123&key=adsds")->controller());
         $this->assertEquals("Vendor\Package1\Controller4", $router->parse("GET", "/segment1/segment4")->controller());
         $this->assertEquals("Vendor\Package1\Controller4::edit", $router->parse("POST", "/segment1/segment4")->controller());
+    }
+
+    public function testFoundWithPrefix()
+    {
+        $router = new Router($this->routes);
+        $this->assertEquals("Vendor\Package\HomeController", $router->parse("GET", "/segment0/", "segment0")->controller());
+        $this->assertEquals("Vendor\Package1\Controller2", $router->parse("GET", "/segment0/segment1/segment2", "segment0")->controller());
+        $this->assertEquals("Vendor\Package1\Controller2", $router->parse("GET", "/segment0/segment1/segment2?q=123&key=adsds", "segment0")->controller());
+        $this->assertEquals("Vendor\Package1\Controller4", $router->parse("GET", "/segment0/segment1/segment4", "segment0")->controller());
+        $this->assertEquals("Vendor\Package1\Controller4::edit", $router->parse("POST", "/segment0/segment1/segment4", "segment0")->controller());
         $this->assertEquals("Vendor\Package1\Controller4::edit", $router->parse("POST", "/prefix/segment1/segment4", "prefix")->controller());
         $this->assertEquals("Vendor\Package1\Controller4::edit", $router->parse("POST", "/prefix/segment1/segment4", "/prefix")->controller());
     }
