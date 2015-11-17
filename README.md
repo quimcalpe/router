@@ -1,8 +1,10 @@
 # quimcalpe/router
 
-[![Build Status](https://img.shields.io/travis/quimcalpe/router.svg?style=flat-square)](http://travis-ci.org/quimcalpe/router) 
 [![Version](https://img.shields.io/packagist/v/quimcalpe/router.svg?style=flat-square)](https://packagist.org/packages/quimcalpe/router)
 [![License](https://img.shields.io/packagist/l/quimcalpe/router.svg?style=flat-square)](https://packagist.org/packages/quimcalpe/router)
+[![Build Status](https://img.shields.io/travis/quimcalpe/router.svg?style=flat-square)](http://travis-ci.org/quimcalpe/router)
+[![Code Coverage](https://scrutinizer-ci.com/g/quimcalpe/router/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/quimcalpe/router/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 
 Regexp based router and dispatcher with a simple interface.
 
