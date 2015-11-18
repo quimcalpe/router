@@ -111,7 +111,10 @@ $router->addRoute('GET', '/users', 'Quimi\Controllers\UserController::index');
 $request = Request::createFromGlobals();
 $route = $router->parse($request->getMethod(), $request->getPathInfo());
 
-$dispatcher = new RequestResponseDispatcher;
+// You can optionally modify the request object here before dispatching:
+$request->attributes->set('foo', 'bar');
+
+$dispatcher = new RequestResponseDispatcher($request);
 $response = $dispatcher->handle($route);
 $response->send();
 ```
