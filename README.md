@@ -111,7 +111,7 @@ $router->addRoute('GET', '/users', 'Quimi\Controllers\UserController::index');
 $request = Request::createFromGlobals();
 $route = $router->parse($request->getMethod(), $request->getPathInfo());
 
-$dispatcher = new RequestResponseDispatcher;
+$dispatcher = new RequestResponseDispatcher($request);
 $response = $dispatcher->handle($route);
 $response->send();
 ```
