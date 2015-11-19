@@ -13,7 +13,7 @@ class Router
         '/\{([A-Za-z]\w*):([^}]+)\}/' => '(?<$1>$2)',
         '/\//' => '\/'
     ];
-    static private $parsed_regexp = []; // cache
+    private static $parsed_regexp = []; // cache
 
     /**
      * Creates a new Router.
@@ -189,7 +189,7 @@ class Router
             $prefix = "/".$prefix;
         }
         try {
-            return $this->findMatches($method, $uri, $prefix);            
+            return $this->findMatches($method, $uri, $prefix);
         } catch (RouteNotFoundException $e) {
             $allowed_methods = [];
             foreach ($this->routes as $available_method => $routes) {
@@ -233,7 +233,7 @@ class Router
                     }
                     return new ParsedRoute($this->routes[strtoupper($method)][$route], $matches);
                 }
-            }            
+            }
         }
         throw new RouteNotFoundException("No route for '{$uri}' found");
     }
@@ -252,5 +252,4 @@ class Router
         }
         return self::$parsed_regexp[$route];
     }
-
 }

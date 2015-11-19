@@ -1,4 +1,6 @@
 <?php
 namespace QuimCalpe\Router;
 
-class RouteNotFoundException extends \Exception {}
+class RouteNotFoundException extends \Exception
+{
+}
