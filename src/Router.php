@@ -5,6 +5,7 @@ class Router
 {
     private $trailing_slash_check = true;
     private $routes = [];
+    private $route_names = [];
     private $regexp_map = [
         '/\{([A-Za-z]\w*)\}/' => '(?<$1>[^/]+)',
         '/\{([A-Za-z]\w*):word\}/' => '(?<$1>\w+)',
@@ -53,9 +54,14 @@ class Router
      * @param string $handler
      *      ClassName::methodName to invoke for this route. If methodName
      *      is not present, a method of 'index' is assumed.
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addRoute($methods, $uri, $handler)
+    public function addRoute($methods, $uri, $handler, $name = null)
     {
+        if (is_string($name) && trim($name) !== "") {
+            $this->route_names[$name] = $uri;
+        }
         foreach ((array)$methods as $method) {
             $method = strtoupper($method);
             if (!isset($this->routes[$method])) {
@@ -70,8 +76,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addHead($uri, $handler)
+    public function addHead($uri, $handler, $name = null)
     {
         $this->addRoute("HEAD", $uri, $handler);
     }
@@ -81,8 +89,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addGet($uri, $handler)
+    public function addGet($uri, $handler, $name = null)
     {
         $this->addRoute("GET", $uri, $handler);
     }
@@ -92,8 +102,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addDelete($uri, $handler)
+    public function addDelete($uri, $handler, $name = null)
     {
         $this->addRoute("DELETE", $uri, $handler);
     }
@@ -103,8 +115,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addOptions($uri, $handler)
+    public function addOptions($uri, $handler, $name = null)
     {
         $this->addRoute("OPTIONS", $uri, $handler);
     }
@@ -114,8 +128,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addPatch($uri, $handler)
+    public function addPatch($uri, $handler, $name = null)
     {
         $this->addRoute("PATCH", $uri, $handler);
     }
@@ -125,8 +141,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addPost($uri, $handler)
+    public function addPost($uri, $handler, $name = null)
     {
         $this->addRoute("POST", $uri, $handler);
     }
@@ -136,8 +154,10 @@ class Router
      *
      * @param string $uri
      * @param string $handler
+     * @param string $name
+     *      (Optional) An unique name for this route.
      */
-    public function addPut($uri, $handler)
+    public function addPut($uri, $handler, $name = null)
     {
         $this->addRoute("PUT", $uri, $handler);
     }
@@ -162,6 +182,28 @@ class Router
     public function addPattern($name, $regexp)
     {
         $this->regexp_map = ['/\{(\w+):'.$name.'\}/' => '(?<$1>'.$regexp.')'] + $this->regexp_map;
+    }
+
+    /**
+     * Finds the uri associated with a given name.
+     *
+     * @param string $name
+     *      Name of the route to find.
+     * @param array $parameters
+     *      (Optional) Parameters to complete the URI.
+     *
+     * @return string|null
+     */
+    public function findURI($name, $parameters = [])
+    {
+        if (array_key_exists($name, $this->route_names)) {
+            $foundUri = $this->route_names[$name];
+            // insert provided parameters on his slot
+            foreach ($parameters as $parameter => $value) {
+                $foundUri = preg_replace("/\{(".$parameter.")(\:\w+)?\}/i", $value, $foundUri);
+            }
+            return $foundUri;
+        }
     }
 
     /**

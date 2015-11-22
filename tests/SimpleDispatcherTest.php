@@ -3,7 +3,7 @@ namespace QuimCalpe\Router\Router\Test;
 
 use QuimCalpe\Router\ParsedRoute;
 use QuimCalpe\Router\SimpleDispatcher;
-use Vendor\Package\MockControllerSimple AS MockController;
+use Vendor\Package\MockControllerSimple as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class SimpleDispatcherTest extends TestCase
@@ -59,10 +59,10 @@ class SimpleDispatcherTest extends TestCase
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerSimple::nono");
         $dispatcher->handle($parsedRoute);
     }
-
 }
 
 namespace Vendor\Package;
+
 class MockControllerSimple
 {
     public static $index;

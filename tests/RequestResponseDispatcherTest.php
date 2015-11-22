@@ -3,7 +3,7 @@ namespace QuimCalpe\Router\Router\Test;
 
 use QuimCalpe\Router\ParsedRoute;
 use QuimCalpe\Router\RequestResponseDispatcher;
-use Vendor\Package\MockControllerRequestResponse AS MockController;
+use Vendor\Package\MockControllerRequestResponse as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class RequestResponseDispatcherTest extends TestCase
@@ -60,10 +60,10 @@ class RequestResponseDispatcherTest extends TestCase
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::nono");
         $dispatcher->handle($parsedRoute);
     }
-
 }
 
 namespace Vendor\Package;
+
 class MockControllerRequestResponse
 {
     public static $index;

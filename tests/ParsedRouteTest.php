@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase as TestCase;
 
 class ParsedRouteTest extends TestCase
 {
-   public function testConstructor()
+    public function testConstructor()
     {
         $parsedRoute = new ParsedRoute("Vendor\\Package\\{controller}::action", [
             "param1" => 1,
