@@ -60,19 +60,19 @@ class RouterTest extends TestCase
     public function testFoundWithParams()
     {
         $router = new Router($this->routes);
-        $resultado = $router->parse("GET", "/segment5/some_controller");
-        $this->assertEquals("Vendor\Package5\{controller}", $resultado->controller());
-        $this->assertEquals("some_controller", $resultado->params()["controller"]);
+        $result = $router->parse("GET", "/segment5/some_controller");
+        $this->assertEquals("Vendor\Package5\{controller}", $result->controller());
+        $this->assertEquals("some_controller", $result->params()["controller"]);
 
-        $resultado = $router->parse("GET", "/segment5/some_controller/some_action");
-        $this->assertEquals("Vendor\Package5\{controller}::{action}", $resultado->controller());
-        $this->assertEquals("some_controller", $resultado->params()["controller"]);
-        $this->assertEquals("some_action", $resultado->params()["action"]);
+        $result = $router->parse("GET", "/segment5/some_controller/some_action");
+        $this->assertEquals("Vendor\Package5\{controller}::{action}", $result->controller());
+        $this->assertEquals("some_controller", $result->params()["controller"]);
+        $this->assertEquals("some_action", $result->params()["action"]);
 
-        $resultado = $router->parse("GET", "/some_package/some_controller");
-        $this->assertEquals("Vendor\{package}\{controller}", $resultado->controller());
-        $this->assertEquals("some_package", $resultado->params()["package"]);
-        $this->assertEquals("some_controller", $resultado->params()["controller"]);
+        $result = $router->parse("GET", "/some_package/some_controller");
+        $this->assertEquals("Vendor\{package}\{controller}", $result->controller());
+        $this->assertEquals("some_package", $result->params()["package"]);
+        $this->assertEquals("some_controller", $result->params()["controller"]);
     }
 
     public function testNotFound()
@@ -167,17 +167,46 @@ class RouterTest extends TestCase
 
         $router->addPattern("phone", "[0-9]-[0-9]{3}-[[0-9]{3}-[0-9]{4}"); // #-###-###-####
 
-        $resultado = $router->parse("GET", "/customer/123");
-        $this->assertEquals("Vendor\Package\Controller", $resultado->controller());
-        $this->assertEquals(123, $resultado->params()["id"]);
+        $result = $router->parse("GET", "/customer/123");
+        $this->assertEquals("Vendor\Package\Controller", $result->controller());
+        $this->assertEquals(123, $result->params()["id"]);
 
-        $resultado = $router->parse("GET", "/customer/John");
-        $this->assertEquals("Vendor\Package\Controller", $resultado->controller());
-        $this->assertEquals("John", $resultado->params()["name"]);
+        $result = $router->parse("GET", "/customer/John");
+        $this->assertEquals("Vendor\Package\Controller", $result->controller());
+        $this->assertEquals("John", $result->params()["name"]);
 
-        $resultado = $router->parse("GET", "/customer/1-222-333-4444");
-        $this->assertEquals("Vendor\Package\Controller", $resultado->controller());
-        $this->assertEquals("1-222-333-4444", $resultado->params()["phone"]);
+        $result = $router->parse("GET", "/customer/1-222-333-4444");
+        $this->assertEquals("Vendor\Package\Controller", $result->controller());
+        $this->assertEquals("1-222-333-4444", $result->params()["phone"]);
     }
 
+    public function test_findURI()
+    {
+        $router = new Router();
+
+        $router->addRoute("GET", "/customer/route1", "Vendor\Package\Controller1", "route1");
+        $router->addRoute("GET", "/customer/route2", "Vendor\Package\Controller2");
+        $this->assertEquals("/customer/route1", $router->findURI("route1"));
+        $this->assertNull($router->findURI("routefoo"));
+
+        $router->addGET("/customer/route3", "Vendor\Package\Controller1", "route3");
+        $this->assertEquals("/customer/route3", $router->findURI("route3"));
+    }
+
+    public function test_findURI_with_parameters()
+    {
+        $router = new Router();
+
+        $router->addRoute("GET", "/customer/{id:number}", "Vendor\Package\Controller1", "route1");
+        $this->assertEquals("/customer/123", $router->findURI("route1", ["id" => 123]));
+
+        $router->addRoute("GET", "/customer/{id}/{action}", "Vendor\Package\Controller2", "route2");
+        $this->assertEquals("/customer/123/edit", $router->findURI("route2", [
+            "id" => 123,
+            "action" => "edit"
+        ]));
+
+        $router->addRoute("GET", "/customer/{id}/{action}", "Vendor\Package\Controller2", "route3");
+        $this->assertEquals("/customer/{id}/{action}", $router->findURI("route3"));
+    }
 }

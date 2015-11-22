@@ -3,8 +3,9 @@ namespace QuimCalpe\Router\Router\Test;
 
 use QuimCalpe\Router\ParsedRoute;
 use QuimCalpe\Router\RequestResponseDispatcher;
-use Vendor\Package\MockControllerRequestResponse AS MockController;
+use Vendor\Package\MockControllerRequestResponse as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 class RequestResponseDispatcherTest extends TestCase
 {
@@ -27,6 +28,15 @@ class RequestResponseDispatcherTest extends TestCase
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertFalse($controller::$index);
+    }
+
+    public function test_with_constructor()
+    {
+        $dispatcher = new RequestResponseDispatcher(Request::createFromGlobals());
+        $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
+        $controller = new MockController;
+        $dispatcher->handle($parsedRoute);
+        $this->assertTrue($controller::$index);
     }
 
     public function testEditAction()
@@ -60,10 +70,10 @@ class RequestResponseDispatcherTest extends TestCase
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::nono");
         $dispatcher->handle($parsedRoute);
     }
-
 }
 
 namespace Vendor\Package;
+
 class MockControllerRequestResponse
 {
     public static $index;

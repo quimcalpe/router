@@ -3,7 +3,7 @@ namespace QuimCalpe\Router\Router\Test;
 
 use QuimCalpe\Router\ParsedRoute;
 use QuimCalpe\Router\WildcardDispatcher;
-use Vendor\Package\MockControllerWildcard AS MockController;
+use Vendor\Package\MockControllerWildcard as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class WildcardDispatcherTest extends TestCase
@@ -89,6 +89,7 @@ class WildcardDispatcherTest extends TestCase
 }
 
 namespace Vendor\Package;
+
 class MockControllerWildcard
 {
     public static $index;
