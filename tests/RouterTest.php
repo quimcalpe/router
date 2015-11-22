@@ -188,6 +188,9 @@ class RouterTest extends TestCase
         $router->addRoute("GET", "/customer/route2", "Vendor\Package\Controller2");
         $this->assertEquals("/customer/route1", $router->findURI("route1"));
         $this->assertNull($router->findURI("routefoo"));
+
+        $router->addGET("/customer/route3", "Vendor\Package\Controller1", "route3");
+        $this->assertEquals("/customer/route3", $router->findURI("route3"));
     }
 
     public function test_findURI_with_parameters()

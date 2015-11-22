@@ -81,7 +81,7 @@ class Router
      */
     public function addHead($uri, $handler, $name = null)
     {
-        $this->addRoute("HEAD", $uri, $handler);
+        $this->addRoute("HEAD", $uri, $handler, $name);
     }
 
     /**
@@ -94,7 +94,7 @@ class Router
      */
     public function addGet($uri, $handler, $name = null)
     {
-        $this->addRoute("GET", $uri, $handler);
+        $this->addRoute("GET", $uri, $handler, $name);
     }
 
     /**
@@ -107,7 +107,7 @@ class Router
      */
     public function addDelete($uri, $handler, $name = null)
     {
-        $this->addRoute("DELETE", $uri, $handler);
+        $this->addRoute("DELETE", $uri, $handler, $name);
     }
 
     /**
@@ -120,7 +120,7 @@ class Router
      */
     public function addOptions($uri, $handler, $name = null)
     {
-        $this->addRoute("OPTIONS", $uri, $handler);
+        $this->addRoute("OPTIONS", $uri, $handler, $name);
     }
 
     /**
@@ -133,7 +133,7 @@ class Router
      */
     public function addPatch($uri, $handler, $name = null)
     {
-        $this->addRoute("PATCH", $uri, $handler);
+        $this->addRoute("PATCH", $uri, $handler, $name);
     }
 
     /**
@@ -146,7 +146,7 @@ class Router
      */
     public function addPost($uri, $handler, $name = null)
     {
-        $this->addRoute("POST", $uri, $handler);
+        $this->addRoute("POST", $uri, $handler, $name);
     }
 
     /**
@@ -159,7 +159,7 @@ class Router
      */
     public function addPut($uri, $handler, $name = null)
     {
-        $this->addRoute("PUT", $uri, $handler);
+        $this->addRoute("PUT", $uri, $handler, $name);
     }
 
     /**
