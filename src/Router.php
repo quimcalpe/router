@@ -1,6 +1,8 @@
 <?php
 namespace QuimCalpe\Router;
 
+use QuimCalpe\Router\Route\Route;
+
 class Router
 {
     private $trailing_slash_check = true;
@@ -28,20 +30,36 @@ class Router
      */
     public function __construct(array $routes = [])
     {
-        foreach ($routes as $uri => $handler) {
-            if (preg_match_all("/^(\[([A-Z|]+)\])?\/?(.*)/i", $uri, $matches, PREG_SET_ORDER)) {
-                $methods = explode("|", strtoupper($matches[0][2]));
-                if (count($methods) === 1 && trim($methods[0]) === "") {
-                    $methods[0] = "GET";
-                }
-                foreach ($methods as $method) {
-                    if (!isset($this->routes[$method])) {
-                        $this->routes[$method] = [];
+        foreach ($routes as $uri => $route) {
+            if ($route instanceof Route) {
+                $this->add($route);
+            } else {
+                @trigger_error('Calling the constructor with an associative array is deprecated since version 0.4 and will be removed in 1.0. Use an array of Route value objects instead.', E_USER_DEPRECATED);
+                if (preg_match_all("/^(\[([A-Z|]+)\])?\/?(.*)/i", $uri, $matches, PREG_SET_ORDER)) {
+                    $methods = explode("|", strtoupper($matches[0][2]));
+                    if (count($methods) === 1 && trim($methods[0]) === "") {
+                        $methods[0] = "GET";
                     }
-                    $this->routes[$method]["/".$matches[0][3]] = $handler;
+                    foreach ($methods as $method) {
+                        if (!isset($this->routes[$method])) {
+                            $this->routes[$method] = [];
+                        }
+                        $this->routes[$method]["/".$matches[0][3]] = $route;
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * Registers a route.
+     *
+     * @param Route $route
+     *      Route Value Object.
+     */
+    public function add(Route $route)
+    {
+        $this->addRoute($route->methods(), $route->uri(), $route->handler(), $route->name());
     }
 
     /**

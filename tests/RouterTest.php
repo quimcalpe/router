@@ -2,20 +2,26 @@
 namespace QuimCalpe\Router\Router\Test;
 
 use QuimCalpe\Router\Router;
+use QuimCalpe\Router\Route\Route;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class RouterTest extends TestCase
 {
-    private $routes = [
-        "/" => "Vendor\Package\HomeController",
-        "/segment" => "Vendor\Package\Controller",
-        "/segment1/segment2" => "Vendor\Package1\Controller2",
-        "/segment1/segment4" => "Vendor\Package1\Controller4",
-        "[POST]/segment1/segment4" => "Vendor\Package1\Controller4::edit",
-        "[GET|POST]/segment5/{controller}" => "Vendor\Package5\{controller}",
-        "/segment5/{controller}/{action}" => "Vendor\Package5\{controller}::{action}",
-        "/{package}/{controller}" => "Vendor\{package}\{controller}"
-    ];
+    private $routes;
+
+    public function setUp()
+    {
+        $this->routes = [
+            new Route("GET", "/", "Vendor\Package\HomeController"),
+            new Route("GET", "/segment", "Vendor\Package\Controller"),
+            new Route("GET", "/segment1/segment2", "Vendor\Package1\Controller2"),
+            new Route("GET", "/segment1/segment4", "Vendor\Package1\Controller4"),
+            new Route("POST", "/segment1/segment4", "Vendor\Package1\Controller4::edit"),
+            new Route(["GET", "POST"], "/segment5/{controller}", "Vendor\Package5\{controller}"),
+            new Route("GET", "/segment5/{controller}/{action}", "Vendor\Package5\{controller}::{action}"),
+            new Route("GET", "/{package}/{controller}", "Vendor\{package}\{controller}")
+        ];
+    }
 
     public function testFound()
     {
@@ -92,7 +98,7 @@ class RouterTest extends TestCase
     public function testAddRoute()
     {
         $router = new Router([
-            "/segment1/segment4" => "Vendor\Package1\Controller4"
+            new Route("GET", "/segment1/segment4", "Vendor\Package1\Controller4")
         ]);
         $router->addRoute("GET", "/segment", "Vendor\Package\Controller");
         $router->addRoute("POST", "/segment1/segment2", "Vendor\Package1\Controller2");
@@ -189,7 +195,7 @@ class RouterTest extends TestCase
         $this->assertEquals("/customer/route1", $router->findURI("route1"));
         $this->assertNull($router->findURI("routefoo"));
 
-        $router->addGET("/customer/route3", "Vendor\Package\Controller1", "route3");
+        $router->add(new Route("GET", "/customer/route3", "Vendor\Package\Controller1", "route3"));
         $this->assertEquals("/customer/route3", $router->findURI("route3"));
     }
 
@@ -208,5 +214,13 @@ class RouterTest extends TestCase
 
         $router->addRoute("GET", "/customer/{id}/{action}", "Vendor\Package\Controller2", "route3");
         $this->assertEquals("/customer/{id}/{action}", $router->findURI("route3"));
+    }
+
+    public function test_router_constructor_deprecated()
+    {
+        $router = new Router([
+            "/segment1/segment4" => "Vendor\Package1\Controller4"
+        ]);
+        $this->assertEquals("Vendor\Package1\Controller4", $router->parse("GET", "/segment1/segment4")->controller());
     }
 }
