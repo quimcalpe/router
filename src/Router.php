@@ -22,12 +22,11 @@ class Router
     /**
      * Creates a new Router.
      *
-     * @param array $routes
-     *      (Optional) Associative array of URIs to handlers.
-     *      URIs take the form of [VERB1|VERB2]/[uri] or /[uri] (the latter
-     *      assumes a verb of GET). Handlers take the form of
-     *      ClassName::methodName or ClassName (in the latter case, a
-     *      methodName of index is assumed).
+     * @param Route[] $routes
+     *      (Optional) Array of Route value objects to create.
+     *
+     * @throws \RunTimeException
+     *      Thrown if array not contains Router instances.
      */
     public function __construct(array $routes = [])
     {
@@ -35,19 +34,7 @@ class Router
             if ($route instanceof Route) {
                 $this->add($route);
             } else {
-                @trigger_error('Calling the constructor with an associative array is deprecated since version 0.4 and will be removed in 1.0. Use an array of Route value objects instead.', E_USER_DEPRECATED);
-                if (preg_match_all("/^(\[([A-Z|]+)\])?\/?(.*)/i", $uri, $matches, PREG_SET_ORDER)) {
-                    $methods = explode("|", strtoupper($matches[0][2]));
-                    if (count($methods) === 1 && trim($methods[0]) === "") {
-                        $methods[0] = "GET";
-                    }
-                    foreach ($methods as $method) {
-                        if (!isset($this->routes[$method])) {
-                            $this->routes[$method] = [];
-                        }
-                        $this->routes[$method]["/".$matches[0][3]] = $route;
-                    }
-                }
+                throw new \RunTimeException("An array of ".Route::class." instances is required since 1.0.0");
             }
         }
     }
