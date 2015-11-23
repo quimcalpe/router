@@ -34,7 +34,7 @@ class Router
             if ($route instanceof Route) {
                 $this->add($route);
             } else {
-                throw new \RunTimeException("An array of ".Route::class." instances is required since 1.0.0");
+                throw new \RunTimeException("An array of QuimCalpe\Router\Route\Route instances is required since 1.0.0");
             }
         }
     }
