@@ -39,16 +39,23 @@ use QuimCalpe\Router\SimpleDispatcher;
 // Create Router instance
 $router = new Router();
 
-// Define routes
-$router->addRoute('GET', '/users', 'Quimi\Controllers\UserController::index');
-$router->addRoute('GET', '/users/edit/{id:number}', 'Quimi\Controllers\UserController::edit');
-$router->addRoute(['POST', 'DELETE'], '/users/remove/{id:number}', 'Quimi\Controllers\UserController::remove');
+// Define routes, last parameter defining route name is optional
+$router->addRoute('GET', '/users', 'Quimi\Controllers\UserController', 'user_list');
+$router->addRoute('GET', '/users/edit/{id:number}', 'Quimi\Controllers\UserController::edit', 'user_edit');
+$router->addRoute(['POST', 'DELETE'], '/users/remove/{id:number}', 'Quimi\Controllers\UserController::remove', 'user_delete');
+
+// Sugar methods for common verbs are also available (GET, POST, PUT, DELETE...)
+$router->addGet('/user/{id}', 'Quimi\Controllers\UserController::show', 'user_show');
+
+// You can also create a QuimCalpe\Router\Route\Route value object and add directly to router's `->add()`
+$route = new Route('GET', '/', 'Quimi\Controllers\HomeController', 'home');
+$router->add($route);
 
 try {
     // Match routes
     $route = $router->parse($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
     // Dispatch route
-    $dispatcher = new SimpleDispatcher;
+    $dispatcher = new SimpleDispatcher();
     $response = $dispatcher->handle($route);
 } catch (QuimCalpe\Router\MethodNotAllowedException $e) {
 	header('HTTP/1.0 405 Method Not Allowed');
@@ -60,6 +67,21 @@ try {
 }
 ```
 
+## Constructor optional Route[] parameter
+You can alternatively pass an array of `Route` objects to Router's constructor, and routes will be created;
+```php
+use QuimCalpe\Router\Router;
+use QuimCalpe\Router\Route\Route;
+
+$routes = [
+	new Route('GET', '/users', 'Quimi\Controllers\UserController', 'user_list'),
+	new Route('GET', '/users/edit/{id:number}', 'Quimi\Controllers\UserController::edit', 'user_edit'),
+	new Route(['POST', 'DELETE'], '/users/remove/{id:number}', 'Quimi\Controllers\UserController::remove', 'user_delete'),
+]
+
+$router = new Router($routes);
+```
+This array can be included from another file, enabling config separation in a simple way.
 
 ### Route Patterns
 
