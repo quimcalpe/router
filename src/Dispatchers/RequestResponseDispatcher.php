@@ -38,10 +38,7 @@ class RequestResponseDispatcher implements DispatcherInterface
             if (!isset($this->request)) {
                 $this->request = Request::createFromGlobals();
             }
-            $params = [$this->request, new Response()];
-            if (count($route->params())) {
-                $params[] = $route->params();
-            }
+            $params = [$this->request, new Response(), $route->params()];
             return call_user_func_array([new $controller(), $action], $params);
         } else {
             throw new RuntimeException("No method {$action} in controller {$segments[0]}");
