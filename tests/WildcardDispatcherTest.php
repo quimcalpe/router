@@ -2,7 +2,7 @@
 namespace QuimCalpe\Router\Router\Test;
 
 use QuimCalpe\Router\Route\ParsedRoute;
-use QuimCalpe\Router\Dispatchers\WildcardDispatcher;
+use QuimCalpe\Router\Dispatcher\WildcardDispatcher;
 use Vendor\Package\MockControllerWildcard as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
 

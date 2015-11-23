@@ -1,5 +1,5 @@
 <?php
-namespace QuimCalpe\Router\Dispatchers;
+namespace QuimCalpe\Router\Dispatcher;
 
 use QuimCalpe\Router\Route\ParsedRoute;
 use Symfony\Component\HttpFoundation\Request;
