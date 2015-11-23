@@ -1,5 +1,5 @@
 <?php
-namespace QuimCalpe\Router;
+namespace QuimCalpe\Router\Exception;
 
 class MethodNotAllowedException extends \Exception
 {

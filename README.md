@@ -57,11 +57,11 @@ try {
     // Dispatch route
     $dispatcher = new SimpleDispatcher();
     $response = $dispatcher->handle($route);
-} catch (QuimCalpe\Router\MethodNotAllowedException $e) {
+} catch (QuimCalpe\Router\Exception\MethodNotAllowedException $e) {
 	header('HTTP/1.0 405 Method Not Allowed');
 	// exception message contains allowed methods
 	header('Allow: '.$e->getMessage());
-} catch (QuimCalpe\Router\RouteNotFoundException $e) {
+} catch (QuimCalpe\Router\Exception\RouteNotFoundException $e) {
 	header('HTTP/1.0 404 Not Found');
     // not found....
 }

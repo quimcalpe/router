@@ -48,7 +48,7 @@ class RouterTest extends TestCase
 
     public function testTrailingSlashNotFound()
     {
-        $this->setExpectedException('QuimCalpe\Router\RouteNotFoundException');
+        $this->setExpectedException('QuimCalpe\Router\Exception\RouteNotFoundException');
         $router = new Router($this->routes);
         $router->parse("GET", "/segment1/segment2/");
     }
@@ -83,14 +83,14 @@ class RouterTest extends TestCase
 
     public function testNotFound()
     {
-        $this->setExpectedException('QuimCalpe\Router\RouteNotFoundException');
+        $this->setExpectedException('QuimCalpe\Router\Exception\RouteNotFoundException');
         $router = new Router($this->routes);
         $router->parse("GET", "/bad/route/whatever");
     }
 
     public function testNotFound2()
     {
-        $this->setExpectedException('QuimCalpe\Router\RouteNotFoundException');
+        $this->setExpectedException('QuimCalpe\Router\Exception\RouteNotFoundException');
         $router = new Router($this->routes);
         $router->parse("PUT", "/bad/route/whatever");
     }
@@ -156,7 +156,7 @@ class RouterTest extends TestCase
 
     public function testAddRouteMethodNotAllowed()
     {
-        $this->setExpectedException('QuimCalpe\Router\MethodNotAllowedException');
+        $this->setExpectedException('QuimCalpe\Router\Exception\MethodNotAllowedException');
         $router = new Router;
         $router->addRoute("GET", "/segment", "Vendor\Package\Controller");
         $router->addRoute(["POST", "PUT"], "/segment2", "Vendor\Package\Controller2");

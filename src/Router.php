@@ -3,6 +3,8 @@ namespace QuimCalpe\Router;
 
 use QuimCalpe\Router\Route\Route;
 use QuimCalpe\Router\Route\ParsedRoute;
+use QuimCalpe\Router\Exception\MethodNotAllowedException;
+use QuimCalpe\Router\Exception\RouteNotFoundException;
 
 class Router
 {
