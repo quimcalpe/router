@@ -1,6 +1,7 @@
 <?php
-namespace QuimCalpe\Router;
+namespace QuimCalpe\Router\Dispatchers;
 
+use QuimCalpe\Router\Route\ParsedRoute;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use RuntimeException;

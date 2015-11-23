@@ -1,8 +1,8 @@
 <?php
 namespace QuimCalpe\Router\Router\Test;
 
-use QuimCalpe\Router\ParsedRoute;
-use QuimCalpe\Router\RequestResponseDispatcher;
+use QuimCalpe\Router\Route\ParsedRoute;
+use QuimCalpe\Router\Dispatchers\RequestResponseDispatcher;
 use Vendor\Package\MockControllerRequestResponse as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;

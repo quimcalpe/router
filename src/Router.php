@@ -2,6 +2,7 @@
 namespace QuimCalpe\Router;
 
 use QuimCalpe\Router\Route\Route;
+use QuimCalpe\Router\Route\ParsedRoute;
 
 class Router
 {
