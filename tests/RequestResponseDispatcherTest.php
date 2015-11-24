@@ -44,7 +44,7 @@ class RequestResponseDispatcherTest extends TestCase
         $this->assertEquals("two", $controller::$edit["param2"]);
     }
 
-    public function testResponse()
+    public function test_correct_response()
     {
         $_GET["arg1"] = "hola";
         $dispatcher = new RequestResponseDispatcher(Request::createFromGlobals());
@@ -52,6 +52,18 @@ class RequestResponseDispatcherTest extends TestCase
         $controller = new MockController;
         $response = $dispatcher->handle($parsedRoute);
         $this->assertEquals("response: hola", $response->getContent());
+        unset($_GET["arg1"]);
+    }
+
+    public function test_mofify_request()
+    {
+        $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
+        $controller = new MockController;
+        $request = new Request();
+        $dispatcher = new RequestResponseDispatcher($request);
+        $request->attributes->set('arg1', 'bye!');
+        $response = $dispatcher->handle($parsedRoute);
+        $this->assertEquals("response: bye!", $response->getContent());
     }
 
     public function testBadAction()
