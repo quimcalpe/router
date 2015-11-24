@@ -11,37 +11,28 @@ class RequestResponseDispatcherTest extends TestCase
 {
     public function testIndexAction()
     {
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertTrue($controller::$index);
 
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse");
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertTrue($controller::$index);
 
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::edit");
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertFalse($controller::$index);
     }
 
-    public function test_with_constructor()
-    {
-        $dispatcher = new RequestResponseDispatcher(Request::createFromGlobals());
-        $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
-        $controller = new MockController;
-        $dispatcher->handle($parsedRoute);
-        $this->assertTrue($controller::$index);
-    }
-
     public function testEditAction()
     {
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::edit", [
             "param1" => 1,
             "param2" => "two"
@@ -55,10 +46,10 @@ class RequestResponseDispatcherTest extends TestCase
 
     public function testResponse()
     {
-        $dispatcher = new RequestResponseDispatcher;
+        $_GET["arg1"] = "hola";
+        $dispatcher = new RequestResponseDispatcher(Request::createFromGlobals());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
         $controller = new MockController;
-        $_GET["arg1"] = "hola";
         $response = $dispatcher->handle($parsedRoute);
         $this->assertEquals("response: hola", $response->getContent());
     }
@@ -66,7 +57,7 @@ class RequestResponseDispatcherTest extends TestCase
     public function testBadAction()
     {
         $this->setExpectedException('RunTimeException');
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::nono");
         $dispatcher->handle($parsedRoute);
     }
