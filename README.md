@@ -6,7 +6,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/quimcalpe/router/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/quimcalpe/router/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 
-Regexp based router and dispatcher with a simple interface.
+Regexp based Router, easy to use and with a rich feature set. Various buit-in Dispatchers are included, and an interface is also provided to enable developing full customized Dispatchers for your project.
 
 ## Install
 
@@ -68,7 +68,9 @@ try {
 ```
 
 ## Constructor optional Route[] parameter
+
 You can alternatively pass an array of `Route` objects to Router's constructor, and routes will be created;
+
 ```php
 use QuimCalpe\Router\Router;
 use QuimCalpe\Router\Route\Route;
@@ -81,6 +83,7 @@ $routes = [
 
 $router = new Router($routes);
 ```
+
 This array can be included from another file, enabling config separation in a simple way.
 
 ### Route Patterns
