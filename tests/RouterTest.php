@@ -215,12 +215,4 @@ class RouterTest extends TestCase
         $router->addRoute("GET", "/customer/{id}/{action}", "Vendor\Package\Controller2", "route3");
         $this->assertEquals("/customer/{id}/{action}", $router->findURI("route3"));
     }
-
-    public function test_router_constructor_exception()
-    {
-        $this->setExpectedException('RunTimeException');
-        $router = new Router([
-            "/segment1/segment4" => "Vendor\Package1\Controller4"
-        ]);
-    }
 }
