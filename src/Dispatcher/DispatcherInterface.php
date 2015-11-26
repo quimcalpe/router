@@ -1,5 +1,7 @@
 <?php
-namespace QuimCalpe\Router;
+namespace QuimCalpe\Router\Dispatcher;
+
+use QuimCalpe\Router\Route\ParsedRoute;
 
 interface DispatcherInterface
 {

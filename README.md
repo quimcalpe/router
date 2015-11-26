@@ -34,7 +34,7 @@ The following versions of PHP are supported by this version.
 require __DIR__ . '/vendor/autoload.php';
 
 use QuimCalpe\Router\Router;
-use QuimCalpe\Router\SimpleDispatcher;
+use QuimCalpe\Router\Dispatcher\SimpleDispatcher;
 
 // Create Router instance
 $router = new Router();
@@ -57,11 +57,11 @@ try {
     // Dispatch route
     $dispatcher = new SimpleDispatcher();
     $response = $dispatcher->handle($route);
-} catch (QuimCalpe\Router\MethodNotAllowedException $e) {
+} catch (QuimCalpe\Router\Exception\MethodNotAllowedException $e) {
 	header('HTTP/1.0 405 Method Not Allowed');
 	// exception message contains allowed methods
 	header('Allow: '.$e->getMessage());
-} catch (QuimCalpe\Router\RouteNotFoundException $e) {
+} catch (QuimCalpe\Router\Exception\RouteNotFoundException $e) {
 	header('HTTP/1.0 404 Not Found');
     // not found....
 }
@@ -125,7 +125,7 @@ Standard Request - Response workflow with Symfony HttpFoundation components is s
 ```php
 use Symfony\Component\HttpFoundation\Request;
 use QuimCalpe\Router\Router;
-use QuimCalpe\Router\RequestResponseDispatcher;
+use QuimCalpe\Router\Dispatcher\RequestResponseDispatcher;
 
 $router = new Router();
 $router->addRoute('GET', '/users', 'Quimi\Controllers\UserController::index');
@@ -153,7 +153,7 @@ interface DispatcherInterface
 }
 ```
 
-`QuimCalpe\Router\ParsedRoute` is a small Value Object with `controller()` and `params()` methods already parsed by `Router::parse`.
+`QuimCalpe\Router\Route\ParsedRoute` is a small Value Object with `controller()` and `params()` methods already parsed by `Router::parse`.
 
 ### Trailing slash
 

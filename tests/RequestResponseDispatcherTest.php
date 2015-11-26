@@ -1,8 +1,8 @@
 <?php
 namespace QuimCalpe\Router\Router\Test;
 
-use QuimCalpe\Router\ParsedRoute;
-use QuimCalpe\Router\RequestResponseDispatcher;
+use QuimCalpe\Router\Route\ParsedRoute;
+use QuimCalpe\Router\Dispatcher\RequestResponseDispatcher;
 use Vendor\Package\MockControllerRequestResponse as MockController;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,37 +11,28 @@ class RequestResponseDispatcherTest extends TestCase
 {
     public function testIndexAction()
     {
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertTrue($controller::$index);
 
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse");
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertTrue($controller::$index);
 
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::edit");
         $controller = new MockController;
         $dispatcher->handle($parsedRoute);
         $this->assertFalse($controller::$index);
     }
 
-    public function test_with_constructor()
-    {
-        $dispatcher = new RequestResponseDispatcher(Request::createFromGlobals());
-        $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
-        $controller = new MockController;
-        $dispatcher->handle($parsedRoute);
-        $this->assertTrue($controller::$index);
-    }
-
     public function testEditAction()
     {
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::edit", [
             "param1" => 1,
             "param2" => "two"
@@ -53,20 +44,32 @@ class RequestResponseDispatcherTest extends TestCase
         $this->assertEquals("two", $controller::$edit["param2"]);
     }
 
-    public function testResponse()
+    public function test_correct_response()
     {
-        $dispatcher = new RequestResponseDispatcher;
+        $_GET["arg1"] = "hola";
+        $dispatcher = new RequestResponseDispatcher(Request::createFromGlobals());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
         $controller = new MockController;
-        $_GET["arg1"] = "hola";
         $response = $dispatcher->handle($parsedRoute);
         $this->assertEquals("response: hola", $response->getContent());
+        unset($_GET["arg1"]);
+    }
+
+    public function test_mofify_request()
+    {
+        $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::index");
+        $controller = new MockController;
+        $request = new Request();
+        $dispatcher = new RequestResponseDispatcher($request);
+        $request->attributes->set('arg1', 'bye!');
+        $response = $dispatcher->handle($parsedRoute);
+        $this->assertEquals("response: bye!", $response->getContent());
     }
 
     public function testBadAction()
     {
         $this->setExpectedException('RunTimeException');
-        $dispatcher = new RequestResponseDispatcher;
+        $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::nono");
         $dispatcher->handle($parsedRoute);
     }

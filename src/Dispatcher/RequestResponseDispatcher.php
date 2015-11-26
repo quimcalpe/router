@@ -1,6 +1,7 @@
 <?php
-namespace QuimCalpe\Router;
+namespace QuimCalpe\Router\Dispatcher;
 
+use QuimCalpe\Router\Route\ParsedRoute;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use RuntimeException;
@@ -8,18 +9,16 @@ use RuntimeException;
 class RequestResponseDispatcher implements DispatcherInterface
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var Request
      */
-    private $request = null;
+    private $request;
 
     /**
-     * @param Request|null $request
+     * @param Request $request
      */
-    public function __construct(Request $request = null)
+    public function __construct(Request $request)
     {
-        if (isset($request)) {
-            $this->request = $request;
-        }
+        $this->request = $request;
     }
 
     /**
@@ -34,13 +33,7 @@ class RequestResponseDispatcher implements DispatcherInterface
         $controller = $segments[0];
         $action = count($segments) > 1 ? $segments[1] : "index";
         if (method_exists($controller, $action)) {
-            if (!isset($this->request)) {
-                $this->request = Request::createFromGlobals();
-            }
-            $params = [$this->request, new Response()];
-            if (count($route->params())) {
-                $params[] = $route->params();
-            }
+            $params = [$this->request, new Response(), $route->params()];
             return call_user_func_array([new $controller(), $action], $params);
         } else {
             throw new RuntimeException("No method {$action} in controller {$segments[0]}");
