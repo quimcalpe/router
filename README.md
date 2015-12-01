@@ -6,7 +6,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/quimcalpe/router/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/quimcalpe/router/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 
-Regexp based router and dispatcher with a simple interface.
+Regexp based Router, easy to use and with a rich feature set. Various built-in Dispatchers are included, and an interface is also provided to enable developing full customized Dispatchers for your project.
 
 ## Install
 
@@ -68,7 +68,9 @@ try {
 ```
 
 ## Constructor optional Route[] parameter
+
 You can alternatively pass an array of `Route` objects to Router's constructor, and routes will be created;
+
 ```php
 use QuimCalpe\Router\Router;
 use QuimCalpe\Router\Route\Route;
@@ -81,6 +83,7 @@ $routes = [
 
 $router = new Router($routes);
 ```
+
 This array can be included from another file, enabling config separation in a simple way.
 
 ### Route Patterns
@@ -141,6 +144,28 @@ $response = $dispatcher->handle($route);
 $response->send();
 ```
 
+### PSR-7 HTTP Message
+
+A built-in `PSR7Dispatcher` is available to work with PHP-FIG's PSR-7 HTTP Message standard implementations, an example using [Zend Diactoros](https://github.com/zendframework/zend-diactoros) and a simple [PSR-7 Response Sender](https://github.com/quimcalpe/psr7-response-sender) would look like this:
+
+```php
+use QuimCalpe\Router\Router;
+use QuimCalpe\Router\Route\Route;
+use QuimCalpe\Router\Dispatcher\PSR7Dispatcher;
+use function QuimCalpe\ResponseSender\send AS send_response;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response;
+
+$router = new Router();
+$router->add(new Route("GET", "/test", "ControllerFoo"));
+
+$request = ServerRequestFactory::fromGlobals();
+$route = $router->parse($request->getMethod(), $request->getUri()->getPath());
+
+$dispatcher = new PSR7Dispatcher($request, new Response());
+$response = $dispatcher->handle($route);
+send_response($response);
+```
 
 ### Custom Dispatcher
 

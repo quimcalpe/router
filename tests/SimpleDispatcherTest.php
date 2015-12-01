@@ -1,5 +1,5 @@
 <?php
-namespace QuimCalpe\Router\Router\Test;
+namespace QuimCalpe\Router\Test;
 
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\SimpleDispatcher;

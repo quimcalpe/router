@@ -32,12 +32,8 @@ class Router
      */
     public function __construct(array $routes = [])
     {
-        foreach ($routes as $uri => $route) {
-            if ($route instanceof Route) {
-                $this->add($route);
-            } else {
-                throw new \RunTimeException("An array of QuimCalpe\Router\Route\Route instances is required since 1.0.0");
-            }
+        foreach ($routes as $route) {
+            $this->add($route);
         }
     }
 
