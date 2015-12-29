@@ -37,23 +37,43 @@ class MockPSR7Response implements ResponseInterface
         return '1.1';
     }
 
-    public function withStatus($code, $reasonPhrase = '') {}
+    public function withStatus($code, $reasonPhrase = '')
+    {
+    }
 
-    public function withProtocolVersion($version) {}
+    public function withProtocolVersion($version)
+    {
+    }
 
-    public function getHeaders() {}
+    public function getHeaders()
+    {
+    }
 
-    public function hasHeader($name) {}
+    public function hasHeader($name)
+    {
+    }
 
-    public function getHeader($name) {}
+    public function getHeader($name)
+    {
+    }
 
-    public function getHeaderLine($name) {}
+    public function getHeaderLine($name)
+    {
+    }
 
-    public function withHeader($name, $value) {}
+    public function withHeader($name, $value)
+    {
+    }
 
-    public function withAddedHeader($name, $value) {}
+    public function withAddedHeader($name, $value)
+    {
+    }
 
-    public function withoutHeader($name) {}
+    public function withoutHeader($name)
+    {
+    }
 
-    public function withBody(StreamInterface $body) {}
+    public function withBody(StreamInterface $body)
+    {
+    }
 }
