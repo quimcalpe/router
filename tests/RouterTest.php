@@ -163,6 +163,15 @@ class RouterTest extends TestCase
         $router->parse("GET", "/segment2");
     }
 
+    public function testAddProvider()
+    {
+        $router = new Router();
+        $router->addRouteProvider(new MockRouteProvider([
+            new Route(["POST", "PUT"], "/segment", "Vendor\\Package\\Controller"),
+        ]));
+        $this->assertEquals("Vendor\\Package\\Controller", $router->parse("PUT", "/segment")->controller());
+    }
+
     public function testPattern()
     {
         $router = new Router();
