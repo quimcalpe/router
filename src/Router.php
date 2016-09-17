@@ -5,6 +5,7 @@ use QuimCalpe\Router\Route\Route;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Exception\MethodNotAllowedException;
 use QuimCalpe\Router\Exception\RouteNotFoundException;
+use QuimCalpe\Router\Route\RouteProvider;
 
 class Router
 {
@@ -72,6 +73,18 @@ class Router
                 $this->routes[$method] = [];
             }
             $this->routes[$method][$uri] = $handler;
+        }
+    }
+
+    /**
+     * Registers a new route provider to feed new routes
+     *
+     * @param RouteProvider $provider
+     */
+    public function addRouteProvider(RouteProvider $provider)
+    {
+        foreach ($provider->routes() as $route) {
+            $this->add($route);
         }
     }
 
@@ -208,6 +221,8 @@ class Router
             }
             return $foundUri;
         }
+
+        return null;
     }
 
     /**
