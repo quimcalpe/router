@@ -84,6 +84,35 @@ $router = new Router($routes);
 
 This array can be included from another file, enabling config separation in a simple way.
 
+### Route Providers
+
+If you want to import a bunch of Routes from a specific package/namespace/bundle and you want to keep routes organized, 
+you can use Route providers, define your provider like this:
+
+```php
+namespace My\Package;
+
+use QuimCalpe\Router\Route\Route;
+use QuimCalpe\Router\Route\RouteProvider;
+
+class MyPackageRoutes implements RouteProvider
+{
+    public function routes(): array
+    {
+        return [
+            new Route('GET', '/users', 'Quimi\Controllers\UserController', 'user_list'),
+            new Route('GET', '/users/edit/{id:number}', 'Quimi\Controllers\UserController::edit', 'user_edit'),
+            new Route(['POST', 'DELETE'], '/users/remove/{id:number}', 'Quimi\Controllers\UserController::remove', 'user_delete'),
+        ];
+    }
+}
+```
+And then initialize the Router with:
+```php
+$router = new Router();
+$router->addRouteProvider(new \My\Package\MyPackageRoutes());
+```
+
 ### Route Patterns
 
 Basic regexp patterns are supported, some are already included:
