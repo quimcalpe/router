@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\RequestResponseDispatcher;
 use Vendor\Package\MockControllerRequestResponse as MockController;
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestResponseDispatcherTest extends TestCase

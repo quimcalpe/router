@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\PSR7Dispatcher;
 use Vendor\Package\MockControllerPSR7 as MockController;
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class PSR7DispatcherTest extends TestCase
 {

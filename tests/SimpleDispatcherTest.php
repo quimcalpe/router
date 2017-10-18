@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\SimpleDispatcher;
 use Vendor\Package\MockControllerSimple as MockController;
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class SimpleDispatcherTest extends TestCase
 {

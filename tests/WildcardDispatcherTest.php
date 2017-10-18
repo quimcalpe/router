@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\WildcardDispatcher;
 use Vendor\Package\MockControllerWildcard as MockController;
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class WildcardDispatcherTest extends TestCase
 {

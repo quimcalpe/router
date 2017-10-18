@@ -3,7 +3,7 @@ namespace QuimCalpe\Router\Test;
 
 use QuimCalpe\Router\Router;
 use QuimCalpe\Router\Route\Route;
-use PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
