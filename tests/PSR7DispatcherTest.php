@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\PSR7Dispatcher;
 use Vendor\Package\MockControllerPSR7 as MockController;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 
 class PSR7DispatcherTest extends TestCase
 {
@@ -56,7 +56,7 @@ class PSR7DispatcherTest extends TestCase
 
     public function testBadAction()
     {
-        $this->setExpectedException('RunTimeException');
+        $this->expectException('RunTimeException');
         $dispatcher = new PSR7Dispatcher(new MockPSR7ServerRequest(), new MockPSR7Response());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerPSR7::nono");
         $dispatcher->handle($parsedRoute);

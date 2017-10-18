@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\SimpleDispatcher;
 use Vendor\Package\MockControllerSimple as MockController;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 
 class SimpleDispatcherTest extends TestCase
 {
@@ -54,7 +54,7 @@ class SimpleDispatcherTest extends TestCase
 
     public function testBadAction()
     {
-        $this->setExpectedException('RunTimeException');
+        $this->expectException('RunTimeException');
         $dispatcher = new SimpleDispatcher;
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerSimple::nono");
         $dispatcher->handle($parsedRoute);

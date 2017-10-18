@@ -2,7 +2,7 @@
 namespace QuimCalpe\Router\Test;
 
 use QuimCalpe\Router\Route\ParsedRoute;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 
 class ParsedRouteTest extends TestCase
 {

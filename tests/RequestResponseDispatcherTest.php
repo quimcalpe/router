@@ -4,7 +4,7 @@ namespace QuimCalpe\Router\Test;
 use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Dispatcher\RequestResponseDispatcher;
 use Vendor\Package\MockControllerRequestResponse as MockController;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestResponseDispatcherTest extends TestCase
@@ -68,7 +68,7 @@ class RequestResponseDispatcherTest extends TestCase
 
     public function testBadAction()
     {
-        $this->setExpectedException('RunTimeException');
+        $this->expectException('RunTimeException');
         $dispatcher = new RequestResponseDispatcher(new Request());
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerRequestResponse::nono");
         $dispatcher->handle($parsedRoute);
