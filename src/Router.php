@@ -62,7 +62,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addRoute($methods, $uri, $handler, $name = null)
+    public function addRoute($methods, string $uri, string $handler, string $name = null)
     {
         if (is_string($name) && trim($name) !== "") {
             $this->route_names[$name] = $uri;
@@ -96,7 +96,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addHead($uri, $handler, $name = null)
+    public function addHead(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("HEAD", $uri, $handler, $name);
     }
@@ -109,7 +109,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addGet($uri, $handler, $name = null)
+    public function addGet(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("GET", $uri, $handler, $name);
     }
@@ -122,7 +122,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addDelete($uri, $handler, $name = null)
+    public function addDelete(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("DELETE", $uri, $handler, $name);
     }
@@ -135,7 +135,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addOptions($uri, $handler, $name = null)
+    public function addOptions(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("OPTIONS", $uri, $handler, $name);
     }
@@ -148,7 +148,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addPatch($uri, $handler, $name = null)
+    public function addPatch(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("PATCH", $uri, $handler, $name);
     }
@@ -161,7 +161,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addPost($uri, $handler, $name = null)
+    public function addPost(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("POST", $uri, $handler, $name);
     }
@@ -174,7 +174,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addPut($uri, $handler, $name = null)
+    public function addPut(string $uri, string $handler, string $name = null)
     {
         $this->addRoute("PUT", $uri, $handler, $name);
     }
@@ -196,7 +196,7 @@ class Router
      * @param string $regexp
      *      Regexp substitution pattern.
      */
-    public function addPattern($name, $regexp)
+    public function addPattern(string $name, string $regexp)
     {
         $this->regexp_map = ['/\{(\w+):'.$name.'\}/' => '(?<$1>'.$regexp.')'] + $this->regexp_map;
     }
@@ -211,7 +211,7 @@ class Router
      *
      * @return string|null
      */
-    public function findURI($name, $parameters = [])
+    public function findURI(string $name, array $parameters = [])
     {
         if (array_key_exists($name, $this->route_names)) {
             $foundUri = $this->route_names[$name];
@@ -243,7 +243,7 @@ class Router
      * @throws RouteNotFoundException
      *      Thrown if there is no handler registered for this route.
      */
-    public function parse($method, $uri, $prefix = "")
+    public function parse(string $method, string $uri, string $prefix = ""): ParsedRoute
     {
         $uri = trim(explode("?", $uri)[0]);
         if ($prefix !== "" && substr($prefix, 0, 1) !== "/") {
@@ -263,9 +263,9 @@ class Router
             }
             if (count($allowed_methods)) {
                 throw new MethodNotAllowedException(implode(", ", $allowed_methods));
-            } else {
-                throw new RouteNotFoundException("No route for '{$uri}' found");
             }
+
+            throw new RouteNotFoundException("No route for '{$uri}' found");
         }
     }
 
@@ -283,7 +283,7 @@ class Router
      *
      * @throws RouteNotFoundException
      */
-    private function findMatches($method, $uri, $prefix = "")
+    private function findMatches(string $method, string $uri, string $prefix = ""): ParsedRoute
     {
         if (isset($this->routes[strtoupper($method)])) {
             foreach (array_keys($this->routes[strtoupper($method)]) as $route) {
@@ -306,7 +306,7 @@ class Router
      *
      * @return string
      */
-    private function prepareRouteRegexp($route)
+    private function prepareRouteRegexp(string $route): string
     {
         if (!array_key_exists($route, self::$parsed_regexp)) {
             self::$parsed_regexp[$route] = preg_replace(array_keys($this->regexp_map), array_values($this->regexp_map), $route);

@@ -5,6 +5,7 @@ use QuimCalpe\Router\Route\ParsedRoute;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
 class PSR7Dispatcher implements DispatcherInterface
 {
@@ -42,8 +43,8 @@ class PSR7Dispatcher implements DispatcherInterface
         if (method_exists($controller, $action)) {
             $params = [$this->request, $this->response, $route->params()];
             return call_user_func_array([new $controller(), $action], $params);
-        } else {
-            throw new RuntimeException("No method {$action} in controller {$segments[0]}");
         }
+
+        throw new RuntimeException("No method {$action} in controller {$segments[0]}");
     }
 }

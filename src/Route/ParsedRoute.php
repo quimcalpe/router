@@ -6,18 +6,18 @@ class ParsedRoute
     private $controller;
     private $params;
 
-    public function __construct($controller, array $params = [])
+    public function __construct(string $controller, array $params = [])
     {
         $this->controller = $controller;
         $this->params = $params;
     }
 
-    public function controller()
+    public function controller(): string
     {
         return $this->controller;
     }
 
-    public function params()
+    public function params(): array
     {
         return $this->params;
     }

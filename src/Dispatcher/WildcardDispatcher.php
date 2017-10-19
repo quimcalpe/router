@@ -28,8 +28,8 @@ class WildcardDispatcher implements DispatcherInterface
         if (method_exists($controller, $action)) {
             $params = [$rawParams];
             return call_user_func_array([new $controller, $action], $params);
-        } else {
-            throw new RuntimeException("No method {$action} in controller {$segments[0]}");
         }
+
+        throw new RuntimeException("No method {$action} in controller {$segments[0]}");
     }
 }

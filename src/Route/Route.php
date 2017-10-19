@@ -21,11 +21,11 @@ class Route
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function __construct($methods, $uri, $handler, $name = null)
+    public function __construct($methods, string $uri, string $handler, string $name = null)
     {
         $this->methods = (array)$methods;
-        $this->uri = (string)$uri;
-        $this->handler = (string)$handler;
+        $this->uri = $uri;
+        $this->handler = $handler;
         $this->name = $name;
     }
 
@@ -34,7 +34,7 @@ class Route
      *
      * @return array
      */
-    public function methods()
+    public function methods(): array
     {
         return $this->methods;
     }
@@ -44,7 +44,7 @@ class Route
      *
      * @return string
      */
-    public function uri()
+    public function uri(): string
     {
         return $this->uri;
     }
@@ -54,7 +54,7 @@ class Route
      *
      * @return string
      */
-    public function handler()
+    public function handler(): string
     {
         return $this->handler;
     }
