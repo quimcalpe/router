@@ -20,10 +20,7 @@ $ composer require quimcalpe/router
 
 The following versions of PHP are supported by this version.
 
-* PHP 5.6
 * PHP 7
-* HHVM
-
 
 ## Basic Usage
 
