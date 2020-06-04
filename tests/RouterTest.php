@@ -9,7 +9,7 @@ class RouterTest extends TestCase
 {
     private $routes;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->routes = [
             new Route("GET", "/", "Vendor\Package\HomeController"),
