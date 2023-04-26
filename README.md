@@ -6,7 +6,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/quimcalpe/router/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/quimcalpe/router/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
 
-Regexp based Router, easy to use and with a rich feature set. Various built-in Dispatchers are included, and an interface is also provided to enable developing full customized Dispatchers for your project.
+Regexp based Router, easy to use and with a rich feature set. It includes various built-in dispatchers, and we also provide an interface to develop fully customized dispatchers for your project.
 
 ## Install
 
@@ -20,7 +20,8 @@ $ composer require quimcalpe/router
 
 The following versions of PHP are supported by this version.
 
-* PHP 7.1
+* PHP 8.0
+* PHP 8.1
 
 ## Basic Usage
 
