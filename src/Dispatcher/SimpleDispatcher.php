@@ -12,7 +12,7 @@ class SimpleDispatcher implements DispatcherInterface
      *
      * @throws RuntimeException
      */
-    public function handle(ParsedRoute $route)
+    public function handle(ParsedRoute $route): mixed
     {
         $segments = explode("::", $route->controller());
         $controller = $segments[0];

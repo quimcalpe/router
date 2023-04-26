@@ -6,5 +6,5 @@ interface RouteProvider
     /**
      * @return Route[]
      */
-    public function routes();
+    public function routes(): array;
 }

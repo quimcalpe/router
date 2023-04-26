@@ -12,7 +12,7 @@ class MockRouteProvider implements RouteProvider
         $this->routes = $routes;
     }
 
-    public function routes()
+    public function routes(): array
     {
         return $this->routes;
     }

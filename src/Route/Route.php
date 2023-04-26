@@ -3,10 +3,10 @@ namespace QuimCalpe\Router\Route;
 
 class Route
 {
-    private $methods;
-    private $uri;
-    private $handler;
-    private $name;
+    private array $methods;
+    private string $uri;
+    private string $handler;
+    private string $name;
 
     /**
      * Creates a new Route.
@@ -21,7 +21,7 @@ class Route
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function __construct($methods, string $uri, string $handler, string $name = null)
+    public function __construct(array|string $methods, string $uri, string $handler, string $name = "")
     {
         $this->methods = (array)$methods;
         $this->uri = $uri;
@@ -62,9 +62,9 @@ class Route
     /**
      * Get the name defined for this route, or null if undefined.
      *
-     * @return string|null
+     * @return string
      */
-    public function name()
+    public function name(): string
     {
         return $this->name;
     }

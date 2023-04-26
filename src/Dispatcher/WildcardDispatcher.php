@@ -12,12 +12,12 @@ class WildcardDispatcher implements DispatcherInterface
      *
      * @throws RuntimeException
      */
-    public function handle(ParsedRoute $route)
+    public function handle(ParsedRoute $route): mixed
     {
         $controller = $route->controller();
         $rawParams = $route->params();
         foreach ($rawParams as $param => $value) {
-            if (strpos($controller, "{".$param."}") !== false) {
+            if (str_contains($controller, "{" . $param . "}")) {
                 $controller = str_replace("{".$param."}", ucfirst($value), $controller);
                 unset($rawParams[$param]);
             }

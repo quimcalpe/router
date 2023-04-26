@@ -6,13 +6,14 @@ use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Exception\MethodNotAllowedException;
 use QuimCalpe\Router\Exception\RouteNotFoundException;
 use QuimCalpe\Router\Route\RouteProvider;
+use RunTimeException;
 
 class Router
 {
-    private $trailing_slash_check = true;
-    private $routes = [];
-    private $route_names = [];
-    private $regexp_map = [
+    private bool $trailing_slash_check = true;
+    private array $routes = [];
+    private array $route_names = [];
+    private array $regexp_map = [
         '/\{([A-Za-z]\w*)\}/' => '(?<$1>[^/]+)',
         '/\{([A-Za-z]\w*):word\}/' => '(?<$1>\w+)',
         '/\{([A-Za-z]\w*):number\}/' => '(?<$1>\d+)',
@@ -20,7 +21,7 @@ class Router
         '/\{([A-Za-z]\w*):([^}]+)\}/' => '(?<$1>$2)',
         '/\//' => '\/'
     ];
-    private static $parsed_regexp = []; // cache
+    private static array $parsed_regexp = []; // cache
 
     /**
      * Creates a new Router.
@@ -28,7 +29,7 @@ class Router
      * @param Route[] $routes
      *      (Optional) Array of Route value objects to create.
      *
-     * @throws \RunTimeException
+     * @throws RunTimeException
      *      Thrown if array not contains Router instances.
      */
     public function __construct(array $routes = [])
@@ -44,7 +45,7 @@ class Router
      * @param Route $route
      *      Route Value Object.
      */
-    public function add(Route $route)
+    public function add(Route $route): void
     {
         $this->addRoute($route->methods(), $route->uri(), $route->handler(), $route->name());
     }
@@ -52,7 +53,7 @@ class Router
     /**
      * Registers a route.
      *
-     * @param string|array $methods
+     * @param array|string $methods
      *      Either a single HTTP verb, or an array of verbs.
      * @param string $uri
      *      URI pattern to match for this route.
@@ -62,7 +63,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addRoute($methods, string $uri, string $handler, string $name = null)
+    public function addRoute(array|string $methods, string $uri, string $handler, string $name = ""): void
     {
         if (is_string($name) && trim($name) !== "") {
             $this->route_names[$name] = $uri;
@@ -81,7 +82,7 @@ class Router
      *
      * @param RouteProvider $provider
      */
-    public function addRouteProvider(RouteProvider $provider)
+    public function addRouteProvider(RouteProvider $provider): void
     {
         foreach ($provider->routes() as $route) {
             $this->add($route);
@@ -96,7 +97,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addHead(string $uri, string $handler, string $name = null)
+    public function addHead(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("HEAD", $uri, $handler, $name);
     }
@@ -109,7 +110,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addGet(string $uri, string $handler, string $name = null)
+    public function addGet(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("GET", $uri, $handler, $name);
     }
@@ -122,7 +123,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addDelete(string $uri, string $handler, string $name = null)
+    public function addDelete(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("DELETE", $uri, $handler, $name);
     }
@@ -135,7 +136,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addOptions(string $uri, string $handler, string $name = null)
+    public function addOptions(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("OPTIONS", $uri, $handler, $name);
     }
@@ -148,7 +149,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addPatch(string $uri, string $handler, string $name = null)
+    public function addPatch(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("PATCH", $uri, $handler, $name);
     }
@@ -161,7 +162,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addPost(string $uri, string $handler, string $name = null)
+    public function addPost(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("POST", $uri, $handler, $name);
     }
@@ -174,7 +175,7 @@ class Router
      * @param string $name
      *      (Optional) An unique name for this route.
      */
-    public function addPut(string $uri, string $handler, string $name = null)
+    public function addPut(string $uri, string $handler, string $name = ""): void
     {
         $this->addRoute("PUT", $uri, $handler, $name);
     }
@@ -183,7 +184,7 @@ class Router
      * Disables distinguishing an extra slash on the end of incoming URIs as a
      * different URL.
      */
-    public function disableTrailingSlashCheck()
+    public function disableTrailingSlashCheck(): void
     {
         $this->trailing_slash_check = false;
     }
@@ -196,7 +197,7 @@ class Router
      * @param string $regexp
      *      Regexp substitution pattern.
      */
-    public function addPattern(string $name, string $regexp)
+    public function addPattern(string $name, string $regexp): void
     {
         $this->regexp_map = ['/\{(\w+):'.$name.'\}/' => '(?<$1>'.$regexp.')'] + $this->regexp_map;
     }
@@ -211,13 +212,13 @@ class Router
      *
      * @return string|null
      */
-    public function findURI(string $name, array $parameters = [])
+    public function findURI(string $name, array $parameters = []): ?string
     {
         if (array_key_exists($name, $this->route_names)) {
             $foundUri = $this->route_names[$name];
             // insert provided parameters on his slot
             foreach ($parameters as $parameter => $value) {
-                $foundUri = preg_replace("/\{(".$parameter.")(\:\w+)?\}/i", $value, $foundUri);
+                $foundUri = preg_replace("/\{(".$parameter.")(:\w+)?}/i", $value, $foundUri);
             }
             return $foundUri;
         }
@@ -246,18 +247,18 @@ class Router
     public function parse(string $method, string $uri, string $prefix = ""): ParsedRoute
     {
         $uri = trim(explode("?", $uri)[0]);
-        if ($prefix !== "" && substr($prefix, 0, 1) !== "/") {
+        if ($prefix !== "" && !str_starts_with($prefix, "/")) {
             $prefix = "/".$prefix;
         }
         try {
             return $this->findMatches($method, $uri, $prefix);
-        } catch (RouteNotFoundException $e) {
+        } catch (RouteNotFoundException) {
             $allowed_methods = [];
             foreach ($this->routes as $available_method => $routes) {
                 try {
                     $this->findMatches($available_method, $uri, $prefix);
                     $allowed_methods[] = $available_method;
-                } catch (RouteNotFoundException $e) {
+                } catch (RouteNotFoundException) {
                     // not found, skip
                 }
             }

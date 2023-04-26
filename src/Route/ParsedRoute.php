@@ -3,8 +3,8 @@ namespace QuimCalpe\Router\Route;
 
 class ParsedRoute
 {
-    private $controller;
-    private $params;
+    private string $controller;
+    private array $params;
 
     public function __construct(string $controller, array $params = [])
     {

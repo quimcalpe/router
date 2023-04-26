@@ -9,20 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PSR7Dispatcher implements DispatcherInterface
 {
-    /**
-     * @var ServerRequestInterface
-     */
-    private $request;
+    private ServerRequestInterface $request;
 
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
+    private ResponseInterface $response;
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     */
     public function __construct(ServerRequestInterface $request, ResponseInterface $response)
     {
         $this->request = $request;
@@ -35,7 +25,7 @@ class PSR7Dispatcher implements DispatcherInterface
      *
      * @throws RuntimeException
      */
-    public function handle(ParsedRoute $route)
+    public function handle(ParsedRoute $route): mixed
     {
         $segments = explode("::", $route->controller());
         $controller = $segments[0];
