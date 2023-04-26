@@ -199,7 +199,7 @@ You can create your custom Dispatcher, implementing `DispatcherInterface`:
 ```php
 interface DispatcherInterface
 {
-    public function handle(ParsedRoute $route);
+    public function handle(ParsedRoute $route): mixed;
 }
 ```
 
