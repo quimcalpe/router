@@ -59,6 +59,38 @@ class SimpleDispatcherTest extends TestCase
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerSimple::nono");
         $dispatcher->handle($parsedRoute);
     }
+
+    public function test_missing_action_throws_ActionNotFoundException()
+    {
+        $this->expectException(\QuimCalpe\Router\Exception\ActionNotFoundException::class);
+        (new SimpleDispatcher())->handle(
+            new ParsedRoute("Vendor\\Package\\MockControllerSimple::nono")
+        );
+    }
+
+    public function test_missing_controller_throws_ControllerNotFoundException()
+    {
+        $this->expectException(\QuimCalpe\Router\Exception\ControllerNotFoundException::class);
+        (new SimpleDispatcher())->handle(
+            new ParsedRoute("Vendor\\Package\\DoesNotExistController::index")
+        );
+    }
+
+    public function test_instantiate_hook_is_used_for_fallback()
+    {
+        $dispatcher = new class extends SimpleDispatcher {
+            public int $factoryCalls = 0;
+
+            protected function instantiate(string $class): object
+            {
+                $this->factoryCalls++;
+                return new $class();
+            }
+        };
+
+        $dispatcher->handle(new ParsedRoute("Vendor\\Package\\MockControllerSimple::index"));
+        $this->assertSame(1, $dispatcher->factoryCalls);
+    }
 }
 
 namespace Vendor\Package;

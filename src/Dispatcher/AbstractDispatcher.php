@@ -2,7 +2,8 @@
 namespace QuimCalpe\Router\Dispatcher;
 
 use Psr\Container\ContainerInterface;
-use RuntimeException;
+use QuimCalpe\Router\Exception\ActionNotFoundException;
+use QuimCalpe\Router\Exception\ControllerNotFoundException;
 
 abstract class AbstractDispatcher implements DispatcherInterface
 {
@@ -22,19 +23,26 @@ abstract class AbstractDispatcher implements DispatcherInterface
     }
 
     /**
-     * @throws RuntimeException
+     * @throws ControllerNotFoundException
+     * @throws ActionNotFoundException
      */
     protected function invoke(string $class, string $action, array $args): mixed
     {
-        if (!method_exists($class, $action)) {
-            throw new RuntimeException("No method {$action} in controller {$class}");
+        if (!$this->canResolve($class)) {
+            throw new ControllerNotFoundException("Controller {$class} not found");
+        }
+        $instance = $this->instance($class);
+        if (!method_exists($instance, $action)) {
+            throw new ActionNotFoundException("No method {$action} in controller {$class}");
         }
 
-        return $this->instance($class)->$action(...$args);
+        return $instance->$action(...$args);
     }
 
     /**
-     * Instancia un controller, opcionalmente vía PSR-11 si hay container.
+     * Resuelve un controller a una instancia. Override completo de la
+     * decisión container-vs-fallback. Para customizar sólo el fallback
+     * (cuando no hay container o no conoce la clase) override `instantiate()`.
      */
     protected function instance(string $class): object
     {
@@ -42,6 +50,25 @@ abstract class AbstractDispatcher implements DispatcherInterface
             return $this->container->get($class);
         }
 
+        return $this->instantiate($class);
+    }
+
+    /**
+     * Hook de instanciación cuando no hay container PSR-11 configurado o
+     * cuando el container no conoce la clase. Override para enchufar una
+     * factory propia (Laravel container, Auryn, etc.) sin envolverla en PSR-11.
+     */
+    protected function instantiate(string $class): object
+    {
         return new $class();
+    }
+
+    /**
+     * @internal Visible para que un override de `instance()`/`instantiate()`
+     * pueda reusar la heurística de existencia. No forma parte de la API estable.
+     */
+    protected function canResolve(string $class): bool
+    {
+        return $this->container?->has($class) || class_exists($class);
     }
 }

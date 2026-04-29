@@ -2,9 +2,7 @@
 
 [![Version](https://img.shields.io/packagist/v/quimcalpe/router.svg?style=flat-square)](https://packagist.org/packages/quimcalpe/router)
 [![License](https://img.shields.io/packagist/l/quimcalpe/router.svg?style=flat-square)](https://packagist.org/packages/quimcalpe/router)
-[![Build Status](https://img.shields.io/travis/quimcalpe/router.svg?style=flat-square)](http://travis-ci.org/quimcalpe/router)
-[![Code Coverage](https://scrutinizer-ci.com/g/quimcalpe/router/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/quimcalpe/router/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/quimcalpe/router/?branch=master)
+[![Tests](https://github.com/quimcalpe/router/actions/workflows/tests.yml/badge.svg)](https://github.com/quimcalpe/router/actions/workflows/tests.yml)
 
 Regexp based Router, easy to use and with a rich feature set. It includes various built-in dispatchers, and we also provide an interface to develop fully customized dispatchers for your project.
 

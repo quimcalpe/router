@@ -224,4 +224,70 @@ class RouterTest extends TestCase
         $router->addRoute("GET", "/customer/{id}/{action}", "Vendor\Package\Controller2", "route3");
         $this->assertEquals("/customer/{id}/{action}", $router->findURI("route3"));
     }
+
+    public function test_findURI_escapes_regex_metacharacters_in_values()
+    {
+        $router = new Router();
+        $router->addRoute("GET", "/search/{q}", "Vendor\\Package\\Controller", "search");
+
+        $this->assertEquals('/search/$1', $router->findURI("search", ["q" => '$1']));
+        $this->assertEquals('/search/\\\\', $router->findURI("search", ["q" => '\\\\']));
+        $this->assertEquals('/search/$0\\1', $router->findURI("search", ["q" => '$0\\1']));
+    }
+
+    public function test_findURI_is_case_sensitive_on_placeholder_names()
+    {
+        $router = new Router();
+        $router->addRoute("GET", "/customer/{id}", "Vendor\\Package\\Controller", "customer");
+
+        $this->assertEquals("/customer/{id}", $router->findURI("customer", ["Id" => 1]));
+        $this->assertEquals("/customer/1", $router->findURI("customer", ["id" => 1]));
+    }
+
+    public function test_addPattern_invalidates_compiled_regex_cache()
+    {
+        $router = new Router();
+        $router->addRoute("GET", "/customer/{phone:phone}", "Vendor\\Package\\Controller");
+
+        $router->addPattern("phone", "[0-9]{3}");
+        $this->assertEquals(
+            "Vendor\\Package\\Controller",
+            $router->parse("GET", "/customer/123")->controller()
+        );
+
+        $router->addPattern("phone", "[A-Z]{3}");
+        $this->assertEquals(
+            "Vendor\\Package\\Controller",
+            $router->parse("GET", "/customer/ABC")->controller()
+        );
+
+        try {
+            $router->parse("GET", "/customer/123");
+            $this->fail("Expected RouteNotFoundException after redefining pattern");
+        } catch (\QuimCalpe\Router\Exception\RouteNotFoundException) {
+            // expected
+        }
+    }
+
+    public function test_compiled_regex_cache_is_not_shared_between_instances()
+    {
+        $router1 = new Router();
+        $router1->addRoute("GET", "/customer/{token:hex}", "Vendor\\Package\\Controller");
+        $router1->addPattern("hex", "[0-9a-f]{4}");
+        $this->assertEquals(
+            "Vendor\\Package\\Controller",
+            $router1->parse("GET", "/customer/abcd")->controller()
+        );
+
+        $router2 = new Router();
+        $router2->addRoute("GET", "/customer/{token:hex}", "Vendor\\Package\\Controller");
+        $router2->addPattern("hex", "[0-9a-f]{6}");
+
+        $this->assertEquals(
+            "Vendor\\Package\\Controller",
+            $router2->parse("GET", "/customer/abcdef")->controller()
+        );
+        $this->expectException(\QuimCalpe\Router\Exception\RouteNotFoundException::class);
+        $router2->parse("GET", "/customer/abcd");
+    }
 }
