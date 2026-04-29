@@ -1,14 +1,20 @@
 <?php
 namespace QuimCalpe\Router\Dispatcher;
 
+use Psr\Container\ContainerInterface;
 use QuimCalpe\Router\Route\ParsedRoute;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use RuntimeException;
 
-class RequestResponseDispatcher implements DispatcherInterface
+class RequestResponseDispatcher extends AbstractDispatcher
 {
-    public function __construct(private readonly Request $request) {}
+    public function __construct(
+        private readonly Request $request,
+        ?ContainerInterface $container = null,
+    ) {
+        parent::__construct($container);
+    }
 
     /**
      * @throws RuntimeException
@@ -16,14 +22,8 @@ class RequestResponseDispatcher implements DispatcherInterface
     #[\Override]
     public function handle(ParsedRoute $route): mixed
     {
-        $segments = explode("::", $route->controller());
-        $controller = $segments[0];
-        $action = count($segments) > 1 ? $segments[1] : "index";
-        if (method_exists($controller, $action)) {
-            $params = [$this->request, new Response(), $route->params()];
-            return call_user_func_array([new $controller(), $action], $params);
-        }
+        [$class, $action] = $this->resolve($route->controller());
 
-        throw new RuntimeException("No method {$action} in controller {$segments[0]}");
+        return $this->invoke($class, $action, [$this->request, new Response(), $route->params()]);
     }
 }
