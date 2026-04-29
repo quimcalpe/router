@@ -8,19 +8,12 @@ use RuntimeException;
 
 class RequestResponseDispatcher implements DispatcherInterface
 {
-    private Request $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+    public function __construct(private readonly Request $request) {}
 
     /**
-     * @param ParsedRoute $route
-     * @return Response
-     *
      * @throws RuntimeException
      */
+    #[\Override]
     public function handle(ParsedRoute $route): mixed
     {
         $segments = explode("::", $route->controller());

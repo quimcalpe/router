@@ -7,18 +7,16 @@ use RuntimeException;
 class WildcardDispatcher implements DispatcherInterface
 {
     /**
-     * @param ParsedRoute $route
-     * @return string
-     *
      * @throws RuntimeException
      */
+    #[\Override]
     public function handle(ParsedRoute $route): mixed
     {
         $controller = $route->controller();
         $rawParams = $route->params();
         foreach ($rawParams as $param => $value) {
             if (str_contains($controller, "{" . $param . "}")) {
-                $controller = str_replace("{".$param."}", ucfirst($value), $controller);
+                $controller = str_replace("{".$param."}", ucfirst((string)$value), $controller);
                 unset($rawParams[$param]);
             }
         }
@@ -26,8 +24,7 @@ class WildcardDispatcher implements DispatcherInterface
         $controller = $segments[0];
         $action = count($segments) > 1 ? $segments[1] : "index";
         if (method_exists($controller, $action)) {
-            $params = [$rawParams];
-            return call_user_func_array([new $controller, $action], $params);
+            return call_user_func_array([new $controller, $action], [$rawParams]);
         }
 
         throw new RuntimeException("No method {$action} in controller {$segments[0]}");

@@ -80,7 +80,7 @@ class MockControllerSimple
         return "response";
     }
 
-    public function edit(array $params = null)
+    public function edit(?array $params = null)
     {
         self::$edit = $params;
     }

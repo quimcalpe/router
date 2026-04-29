@@ -91,11 +91,12 @@ class MockControllerRequestResponse
     public function index($request, $response)
     {
         self::$index = true;
-        $response->setContent("response: ".$request->get("arg1"));
+        $arg1 = $request->attributes->get("arg1") ?? $request->query->get("arg1");
+        $response->setContent("response: ".$arg1);
         return $response;
     }
 
-    public function edit($request, $response, array $params = null)
+    public function edit($request, $response, ?array $params = null)
     {
         self::$edit = $params;
     }

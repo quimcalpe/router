@@ -5,26 +5,18 @@ use QuimCalpe\Router\Route\ParsedRoute;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
 
 class PSR7Dispatcher implements DispatcherInterface
 {
-    private ServerRequestInterface $request;
-
-    private ResponseInterface $response;
-
-    public function __construct(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        $this->request = $request;
-        $this->response = $response;
-    }
+    public function __construct(
+        private readonly ServerRequestInterface $request,
+        private readonly ResponseInterface $response,
+    ) {}
 
     /**
-     * @param ParsedRoute $route
-     * @return Response
-     *
      * @throws RuntimeException
      */
+    #[\Override]
     public function handle(ParsedRoute $route): mixed
     {
         $segments = explode("::", $route->controller());

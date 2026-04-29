@@ -50,7 +50,7 @@ class PSR7DispatcherTest extends TestCase
         $parsedRoute = new ParsedRoute("Vendor\Package\MockControllerPSR7::index2");
         $controller = new MockController;
         $response = $dispatcher->handle($parsedRoute);
-        $this->assertEquals("response: hola", $response->getBody());
+        $this->assertEquals("response: hola", (string)$response->getBody());
         unset($_GET["arg1"]);
     }
 
@@ -89,7 +89,7 @@ class MockControllerPSR7
         return $response;
     }
 
-    public function edit($request, $response, array $params = null)
+    public function edit($request, $response, ?array $params = null)
     {
         self::$edit = $params;
     }

@@ -1,149 +1,54 @@
 <?php
 namespace QuimCalpe\Router\Test;
 
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class MockPSR7ServerRequest implements ServerRequestInterface
 {
-    private $queryParams;
+    public function __construct(private array $queryParams = []) {}
 
-    public function __construct(array $queryParams = [])
-    {
-        $this->queryParams = $queryParams;
-    }
-
-    public function getQueryParams()
+    public function getQueryParams(): array
     {
         return $this->queryParams;
     }
 
-    public function getBody()
+    public function getBody(): StreamInterface
     {
+        return new MockPSR7Stream('');
     }
 
-    public function getStatusCode()
-    {
-    }
+    public function getProtocolVersion(): string { return '1.1'; }
+    public function withProtocolVersion(string $version): MessageInterface { return $this; }
+    public function getHeaders(): array { return []; }
+    public function hasHeader(string $name): bool { return false; }
+    public function getHeader(string $name): array { return []; }
+    public function getHeaderLine(string $name): string { return ''; }
+    public function withHeader(string $name, $value): MessageInterface { return $this; }
+    public function withAddedHeader(string $name, $value): MessageInterface { return $this; }
+    public function withoutHeader(string $name): MessageInterface { return $this; }
+    public function withBody(StreamInterface $body): MessageInterface { return $this; }
 
-    public function getReasonPhrase()
-    {
-    }
+    public function getServerParams(): array { return []; }
+    public function getCookieParams(): array { return []; }
+    public function withCookieParams(array $cookies): ServerRequestInterface { return $this; }
+    public function withQueryParams(array $query): ServerRequestInterface { return $this; }
+    public function getUploadedFiles(): array { return []; }
+    public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface { return $this; }
+    public function getParsedBody() { return null; }
+    public function withParsedBody($data): ServerRequestInterface { return $this; }
+    public function getAttributes(): array { return []; }
+    public function getAttribute(string $name, $default = null) { return $default; }
+    public function withAttribute(string $name, $value): ServerRequestInterface { return $this; }
+    public function withoutAttribute(string $name): ServerRequestInterface { return $this; }
 
-    public function getProtocolVersion()
-    {
-    }
-
-    public function withStatus($code, $reasonPhrase = '')
-    {
-    }
-
-    public function withProtocolVersion($version)
-    {
-    }
-
-    public function getHeaders()
-    {
-    }
-
-    public function hasHeader($name)
-    {
-    }
-
-    public function getHeader($name)
-    {
-    }
-
-    public function getHeaderLine($name)
-    {
-    }
-
-    public function withHeader($name, $value)
-    {
-    }
-
-    public function withAddedHeader($name, $value)
-    {
-    }
-
-    public function withoutHeader($name)
-    {
-    }
-
-    public function withBody(StreamInterface $body)
-    {
-    }
-
-    public function getServerParams()
-    {
-    }
-
-    public function getCookieParams()
-    {
-    }
-
-    public function withCookieParams(array $cookies)
-    {
-    }
-
-    public function withQueryParams(array $query)
-    {
-    }
-
-    public function getUploadedFiles()
-    {
-    }
-
-    public function withUploadedFiles(array $uploadedFiles)
-    {
-    }
-
-    public function getParsedBody()
-    {
-    }
-
-    public function withParsedBody($data)
-    {
-    }
-
-    public function getAttributes()
-    {
-    }
-
-    public function getAttribute($name, $default = null)
-    {
-    }
-
-    public function withAttribute($name, $value)
-    {
-    }
-
-    public function withoutAttribute($name)
-    {
-    }
-
-    public function getRequestTarget()
-    {
-    }
-
-    public function withRequestTarget($requestTarget)
-    {
-    }
-
-    public function getMethod()
-    {
-    }
-
-    public function withMethod($method)
-    {
-    }
-
-    public function getUri()
-    {
-    }
-
-    public function withUri(UriInterface $uri, $preserveHost = false)
-    {
-    }
+    public function getRequestTarget(): string { return '/'; }
+    public function withRequestTarget(string $requestTarget): RequestInterface { return $this; }
+    public function getMethod(): string { return 'GET'; }
+    public function withMethod(string $method): RequestInterface { return $this; }
+    public function getUri(): UriInterface { throw new \RuntimeException('not implemented'); }
+    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface { return $this; }
 }

@@ -20,7 +20,7 @@ $ composer require quimcalpe/router
 
 The following versions of PHP are supported by this version.
 
-* PHP 8.1
+* PHP 8.5
 
 ## Basic Usage
 

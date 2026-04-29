@@ -6,7 +6,6 @@ use QuimCalpe\Router\Route\ParsedRoute;
 use QuimCalpe\Router\Exception\MethodNotAllowedException;
 use QuimCalpe\Router\Exception\RouteNotFoundException;
 use QuimCalpe\Router\Route\RouteProvider;
-use RunTimeException;
 
 class Router
 {
@@ -28,9 +27,6 @@ class Router
      *
      * @param Route[] $routes
      *      (Optional) Array of Route value objects to create.
-     *
-     * @throws RunTimeException
-     *      Thrown if array not contains Router instances.
      */
     public function __construct(array $routes = [])
     {
